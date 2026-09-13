@@ -12,10 +12,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Coffey-Labs/WGX/internal/config"
-	"github.com/Coffey-Labs/WGX/internal/netcfg"
-	"github.com/Coffey-Labs/WGX/internal/store"
-	"github.com/Coffey-Labs/WGX/internal/wg"
+	"github.com/Coffey-Labs/ihasvpn/internal/config"
+	"github.com/Coffey-Labs/ihasvpn/internal/netcfg"
+	"github.com/Coffey-Labs/ihasvpn/internal/store"
+	"github.com/Coffey-Labs/ihasvpn/internal/wg"
 )
 
 const (

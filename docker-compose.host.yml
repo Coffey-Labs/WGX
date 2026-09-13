@@ -1,4 +1,4 @@
-# WGX on the host network: the fastest way to run it.
+# ihasvpn on the host network: the fastest way to run it.
 #
 # With `network_mode: host` the WireGuard socket sits directly on the host's
 # interfaces. There is no port mapping, no conntrack entry per client packet
@@ -6,32 +6,32 @@
 # little latency on a busy server. The trade-offs: wg0 is created in the
 # host's namespace (you will see it in `ip link` and it is removed on
 # shutdown), the NAT rules land in the host's nftables as a table named
-# `wgx`, and the admin UI listens on the host directly -- so it is bound to
+# `ihasvpn`, and the admin UI listens on the host directly -- so it is bound to
 # localhost below. Put a reverse proxy in front of it or set
-# WGX_TLS_SELF_SIGNED to reach it from elsewhere.
+# IHASVPN_TLS_SELF_SIGNED to reach it from elsewhere.
 services:
-  wgx:
-    image: ghcr.io/coffey-labs/wgx:latest
-    container_name: wgx
+  ihasvpn:
+    image: ghcr.io/coffey-labs/ihasvpn:latest
+    container_name: ihasvpn
     restart: unless-stopped
     network_mode: host
     cap_add:
       - NET_ADMIN
     environment:
-      WGX_ENDPOINT: vpn.example.com
-      WGX_PORT: "51820"
-      WGX_SUBNET: 10.8.0.0/24
-      WGX_DNS: 1.1.1.1, 1.0.0.1
-      WGX_HTTP_LISTEN: "127.0.0.1:51821"
-      # In host mode the forwarding sysctls are the host's own; WGX sets
+      IHASVPN_ENDPOINT: vpn.example.com
+      IHASVPN_PORT: "51820"
+      IHASVPN_SUBNET: 10.8.0.0/24
+      IHASVPN_DNS: 1.1.1.1, 1.0.0.1
+      IHASVPN_HTTP_LISTEN: "127.0.0.1:51821"
+      # In host mode the forwarding sysctls are the host's own; ihasvpn sets
       # them itself since it has NET_ADMIN, but if you prefer to own them
       # add `net.ipv4.ip_forward = 1` to /etc/sysctl.d/ and turn this off.
-      # WGX_MANAGE_SYSCTL: "false"
+      # IHASVPN_MANAGE_SYSCTL: "false"
       # Pick the interface to masquerade on if auto-detection picks the
       # wrong one (it uses the default route).
-      # WGX_EGRESS_INTERFACE: eth0
+      # IHASVPN_EGRESS_INTERFACE: eth0
     volumes:
-      - wgx-data:/data
+      - ihasvpn-data:/data
 
 volumes:
-  wgx-data:
+  ihasvpn-data:

@@ -4,7 +4,7 @@
 
 export type ThemeChoice = "dark" | "light" | "system";
 
-const KEY = "wgx.theme";
+const KEY = "ihasvpn.theme";
 const media = window.matchMedia("(prefers-color-scheme: light)");
 const listeners = new Set<(c: ThemeChoice) => void>();
 
@@ -28,7 +28,7 @@ export function applyTheme(choice: ThemeChoice) {
   document.documentElement.dataset.theme = resolved;
   // Keeps the browser chrome (address bar on phones) in step with the page.
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", resolved === "light" ? "#f4f6f5" : "#121a17");
+  if (meta) meta.setAttribute("content", resolved === "light" ? "#f4f9f9" : "#0d2430");
 }
 
 export function setThemeChoice(choice: ThemeChoice) {

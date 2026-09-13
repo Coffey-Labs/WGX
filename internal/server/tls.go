@@ -45,7 +45,7 @@ func (s *Server) loadCertificate() (tls.Certificate, error) {
 	host := s.eng.Settings().EndpointHost
 	tmpl := &x509.Certificate{
 		SerialNumber: serial,
-		Subject:      pkix.Name{CommonName: "WGX", Organization: []string{"WGX"}},
+		Subject:      pkix.Name{CommonName: "ihasvpn", Organization: []string{"ihasvpn"}},
 		NotBefore:    time.Now().Add(-time.Hour),
 		NotAfter:     time.Now().Add(3 * 365 * 24 * time.Hour),
 		KeyUsage:     x509.KeyUsageDigitalSignature | x509.KeyUsageKeyEncipherment,

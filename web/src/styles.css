@@ -1,56 +1,65 @@
 /* Dark is the default. theme.ts resolves the user's choice (dark, light or
    follow the system) onto <html data-theme>, so the stylesheet only needs the
-   one override below. */
+   one override below.
+
+   The palette is ihasmail's: the teal-navy of ihasmail.org, warmed by the
+   orange the cat is drawn in. Dark takes the ihasmail app's "ihasmail" theme
+   as it is. Light takes that theme's contrast-checked tiers, with the accent
+   from ihasmail.org's light scheme, since the app's lighter teal is under
+   4.5:1 behind the white text on a primary button. */
 :root {
-  --bg: #111715;
-  --bg-elev: #19211e;
-  --bg-sunken: #0c100f;
-  --fg: #e6ece9;
-  --fg-muted: #9aa8a2;
-  --fg-faint: #6a7772;
-  --line: #26312d;
-  --line-strong: #3a4742;
-  --accent: #3fae90;
-  --accent-fg: #06110d;
-  --accent-soft: #163a31;
-  --ok: #3fc275;
-  --ok-soft: #12321f;
-  --warn: #e0a84a;
-  --warn-soft: #3a2c10;
-  --bad: #ef6b62;
-  --bad-soft: #3d1815;
-  --info: #5f9de0;
-  --rx: #5f9de0;
-  --tx: #3fae90;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --bg: #0d2430;
+  --bg-elev: #12303e;
+  --bg-sunken: #0a1c26;
+  --fg: #eaf6f6;
+  --fg-muted: #a3c3cb;
+  --fg-faint: #86aab4;
+  --line: #21505f;
+  --line-strong: #2e6a7a;
+  --accent: #46cac3;
+  --accent-fg: #062028;
+  --accent-soft: rgba(70, 202, 195, 0.16);
+  --ok: #4ade80;
+  --ok-soft: rgba(74, 222, 128, 0.15);
+  --warn: #f9a34b;
+  --warn-soft: rgba(249, 163, 75, 0.14);
+  --bad: #f87171;
+  --bad-soft: rgba(248, 113, 113, 0.15);
+  --info: #6fdcd6;
+  /* Traffic: received in the cat's orange, sent in the shield's teal. */
+  --rx: #f9a34b;
+  --tx: #46cac3;
+  --backdrop: rgba(6, 20, 27, 0.6);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 8px 24px rgba(0, 0, 0, 0.4);
   --radius: 12px;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   color-scheme: dark;
 }
 
 :root[data-theme="light"] {
-  --bg: #f4f6f5;
+  --bg: #f4f9f9;
   --bg-elev: #ffffff;
-  --bg-sunken: #e9edeb;
-  --fg: #16201c;
-  --fg-muted: #5c6b64;
-  --fg-faint: #8b9791;
-  --line: #d8dfdb;
-  --line-strong: #b9c4be;
-  --accent: #1f6f5c;
+  --bg-sunken: #e7f1f2;
+  --fg: #0d2430;
+  --fg-muted: #4a6b74;
+  --fg-faint: #62757a;
+  --line: #cfe2e4;
+  --line-strong: #849295;
+  --accent: #0b6b67;
   --accent-fg: #ffffff;
-  --accent-soft: #dcefe8;
-  --ok: #1d8f4e;
-  --ok-soft: #dcf3e4;
-  --warn: #b7791f;
-  --warn-soft: #fbeed3;
-  --bad: #c2382f;
-  --bad-soft: #f9dedb;
-  --info: #2a6fb0;
-  --rx: #2a6fb0;
-  --tx: #1f6f5c;
-  --shadow: 0 1px 2px rgba(20, 30, 26, 0.06), 0 8px 24px rgba(20, 30, 26, 0.06);
+  --accent-soft: #daeceb;
+  --ok: #15803d;
+  --ok-soft: #dcfce7;
+  --warn: #b45309;
+  --warn-soft: #fef3c7;
+  --bad: #dc2626;
+  --bad-soft: #fee2e2;
+  --info: #0e7490;
+  --rx: #c5813b;
+  --tx: #379e98;
+  --backdrop: rgba(13, 36, 48, 0.45);
+  --shadow: 0 1px 2px rgba(13, 36, 48, 0.06), 0 8px 24px rgba(13, 36, 48, 0.08);
   color-scheme: light;
 }
 
@@ -102,7 +111,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px; color: var(--fg); line-height: 1.15; }
 .brand:hover { text-decoration: none; }
 .brand svg { flex: none; display: block; }
-.brand-name { display: block; font-weight: 700; font-size: 16px; letter-spacing: 0.02em; }
+.brand-name { display: block; font-weight: 800; font-size: 18px; letter-spacing: -0.03em; }
 .brand-sub { display: block; font-size: 11px; color: var(--fg-muted); margin-top: 2px; }
 .nav { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
 .nav-group { display: flex; flex-direction: column; gap: 2px; }
@@ -363,7 +372,7 @@ textarea.input { min-height: 72px; resize: vertical; }
 .auth h1 { text-align: center; margin: 4px 0 16px; }
 
 /* Modal */
-.modal-back { position: fixed; inset: 0; background: rgba(8, 12, 10, 0.5); display: grid; place-items: center; padding: 20px; z-index: 50; backdrop-filter: blur(2px); }
+.modal-back { position: fixed; inset: 0; background: var(--backdrop); display: grid; place-items: center; padding: 20px; z-index: 50; backdrop-filter: blur(2px); }
 .modal { width: 100%; max-width: 640px; max-height: calc(100vh - 40px); overflow: auto; }
 .modal.wide { max-width: 860px; }
 .modal .card-head h2 { font-size: 16px; }
@@ -383,7 +392,7 @@ textarea.input { min-height: 72px; resize: vertical; }
 /* Peer detail */
 .kv { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; font-size: 13px; }
 .kv dt { color: var(--fg-muted); }
-.kv dd { margin: 0; word-break: break-all; }
+.kv dd { margin: 0; overflow-wrap: anywhere; }
 .qr { display: grid; grid-template-columns: 1fr; gap: 16px; }
 .qr img { width: 100%; max-width: 320px; image-rendering: pixelated; border-radius: 8px; border: 1px solid var(--line); background: #fff; justify-self: center; }
 pre.config { background: var(--bg-sunken); border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-family: var(--mono); font-size: 12.5px; overflow: auto; margin: 0; white-space: pre; }

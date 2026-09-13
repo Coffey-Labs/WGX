@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// Rules describes the firewall WGX wants.
+// Rules describes the firewall ihasvpn wants.
 type Rules struct {
 	// Iface is the WireGuard interface name, e.g. wg0.
 	Iface string
@@ -31,7 +31,7 @@ type Rules struct {
 	// "the VPN connects but websites hang".
 	ClampMSS bool
 	// Table names the nftables table, so a host with its own rules never
-	// collides with ours. Defaults to "wgx".
+	// collides with ours. Defaults to "ihasvpn".
 	Table string
 }
 
@@ -40,7 +40,7 @@ type Rules struct {
 func Ruleset(r Rules) string {
 	table := r.Table
 	if table == "" {
-		table = "wgx"
+		table = "ihasvpn"
 	}
 	var b strings.Builder
 	fmt.Fprintf(&b, "table inet %s\n", table)
@@ -88,10 +88,10 @@ func Apply(ctx context.Context, r Rules) error {
 	return runNFT(ctx, Ruleset(r))
 }
 
-// Remove deletes the WGX table, ignoring the case where it is already gone.
+// Remove deletes the ihasvpn table, ignoring the case where it is already gone.
 func Remove(ctx context.Context, table string) error {
 	if table == "" {
-		table = "wgx"
+		table = "ihasvpn"
 	}
 	script := fmt.Sprintf("table inet %s\ndelete table inet %s\n", table, table)
 	return runNFT(ctx, script)

@@ -30,4 +30,4 @@ jobs:
       - name: govulncheck
         run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
       - name: Docker build
-        run: docker build -t wgx:ci .
+        run: docker build -t ihasvpn:ci .

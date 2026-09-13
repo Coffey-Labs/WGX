@@ -8,7 +8,7 @@ import (
 	"net/netip"
 	"strings"
 
-	"github.com/Coffey-Labs/WGX/internal/store"
+	"github.com/Coffey-Labs/ihasvpn/internal/store"
 )
 
 // Settings are the administrator-editable server options. They persist in the

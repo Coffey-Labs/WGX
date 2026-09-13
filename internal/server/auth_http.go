@@ -10,11 +10,11 @@ import (
 
 	"github.com/skip2/go-qrcode"
 
-	"github.com/Coffey-Labs/WGX/internal/auth"
-	"github.com/Coffey-Labs/WGX/internal/store"
+	"github.com/Coffey-Labs/ihasvpn/internal/auth"
+	"github.com/Coffey-Labs/ihasvpn/internal/store"
 )
 
-const cookieName = "wgx_session"
+const cookieName = "ihasvpn_session"
 
 type ctxKey int
 
@@ -450,7 +450,7 @@ func (s *Server) handleTOTPSetup(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	writeJSON(w, http.StatusOK, totpSetupResponse{Secret: secret, URI: auth.TOTPURI("WGX", u.Username, secret)})
+	writeJSON(w, http.StatusOK, totpSetupResponse{Secret: secret, URI: auth.TOTPURI("ihasvpn", u.Username, secret)})
 }
 
 // handleTOTPQR renders the pending secret's otpauth URI as a QR code. Only a
@@ -462,7 +462,7 @@ func (s *Server) handleTOTPQR(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusNotFound, "no two-factor setup in progress")
 		return
 	}
-	png, err := qrcode.Encode(auth.TOTPURI("WGX", u.Username, u.TOTPSecret), qrcode.Medium, 256)
+	png, err := qrcode.Encode(auth.TOTPURI("ihasvpn", u.Username, u.TOTPSecret), qrcode.Medium, 256)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return

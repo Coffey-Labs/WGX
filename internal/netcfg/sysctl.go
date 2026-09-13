@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// Sysctl is one kernel parameter and the value WGX wants for it.
+// Sysctl is one kernel parameter and the value ihasvpn wants for it.
 type Sysctl struct {
 	Key   string
 	Value string
@@ -27,7 +27,7 @@ type Result struct {
 	Err     string
 }
 
-// Wanted returns the sysctls WGX applies at startup, in order.
+// Wanted returns the sysctls ihasvpn applies at startup, in order.
 func Wanted(ipv6 bool) []Sysctl {
 	s := []Sysctl{
 		{Key: "net.ipv4.ip_forward", Value: "1", Required: true, Why: "peers cannot reach anything beyond the server without forwarding"},

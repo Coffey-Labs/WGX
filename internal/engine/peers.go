@@ -13,9 +13,9 @@ import (
 
 	"github.com/skip2/go-qrcode"
 
-	"github.com/Coffey-Labs/WGX/internal/auth"
-	"github.com/Coffey-Labs/WGX/internal/store"
-	"github.com/Coffey-Labs/WGX/internal/wg"
+	"github.com/Coffey-Labs/ihasvpn/internal/auth"
+	"github.com/Coffey-Labs/ihasvpn/internal/store"
+	"github.com/Coffey-Labs/ihasvpn/internal/wg"
 )
 
 // PeerInput is what the API accepts when creating or editing a peer.
@@ -170,7 +170,7 @@ func (e *Engine) CreatePeer(ctx context.Context, in PeerInput) (*store.Peer, err
 		}
 		p.IPv6 = a6.String()
 	} else if in.IPv6 != "" {
-		return nil, invalid("IPv6 is not enabled on this server (set WGX_SUBNET6)")
+		return nil, invalid("IPv6 is not enabled on this server (set IHASVPN_SUBNET6)")
 	}
 	if err := applyEditable(p, in, settings); err != nil {
 		return nil, err

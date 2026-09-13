@@ -11,7 +11,7 @@ import (
 )
 
 // Mock is an in-memory data plane. It needs no privileges, so it is what the
-// tests use and what `WGX_BACKEND=mock` gives a developer working on the UI.
+// tests use and what `IHASVPN_BACKEND=mock` gives a developer working on the UI.
 // With Simulate on, peers randomly handshake, move traffic and go quiet so
 // the dashboard has something to show.
 type Mock struct {

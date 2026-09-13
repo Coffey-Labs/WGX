@@ -23,7 +23,7 @@ import (
 // linuxBackend drives a real WireGuard interface. In kernel mode the link is a
 // native `wireguard` netlink link and every packet is handled by the module;
 // in userspace mode a wireguard-go process owns a TUN device with the same
-// name and WGX talks to it over its UAPI socket. Both are configured through
+// name and ihasvpn talks to it over its UAPI socket. Both are configured through
 // wgctrl, which picks the transport on its own.
 type linuxBackend struct {
 	name      string
@@ -38,7 +38,7 @@ type linuxBackend struct {
 // trusting /sys/module, because a module that is loadable but not yet loaded
 // is only discovered by asking for it.
 func KernelAvailable() bool {
-	const probe = "wgxprobe0"
+	const probe = "ihasvpnprobe0"
 	link := &netlink.Wireguard{LinkAttrs: netlink.LinkAttrs{Name: probe}}
 	if err := netlink.LinkAdd(link); err != nil {
 		return false

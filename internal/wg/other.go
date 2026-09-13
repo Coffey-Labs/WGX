@@ -7,7 +7,7 @@ import (
 	"log/slog"
 )
 
-var errLinuxOnly = errors.New("real WireGuard interfaces are only supported on Linux; use WGX_BACKEND=mock for development")
+var errLinuxOnly = errors.New("real WireGuard interfaces are only supported on Linux; use IHASVPN_BACKEND=mock for development")
 
 // KernelAvailable is always false off Linux.
 func KernelAvailable() bool { return false }
