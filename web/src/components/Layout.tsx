@@ -5,6 +5,7 @@ import { useLive } from "../state";
 import { Mark } from "./Mark";
 import { ThemeToggle } from "./ThemeSwitch";
 import { UserMenu } from "./UserMenu";
+import { Legal } from "./Legal";
 
 // Account is reached through the user menu, so it is not a nav item.
 const groups = [
@@ -87,9 +88,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <ThemeToggle />
           </div>
           <UserMenu placement="up" showName />
-          <a className="source" href="https://github.com/Coffey-Labs/WGX" target="_blank" rel="noreferrer">
-            AGPL-3.0 source
-          </a>
+          <Legal />
         </div>
       </aside>
 

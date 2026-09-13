@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { ChevronDown, LogOut, Shield } from "lucide-react";
 import { useAuth } from "../state";
 import { ThemeSwitch } from "./ThemeSwitch";
+import { Legal } from "./Legal";
 
 // The signed-in user: avatar button that opens a small menu with the
 // account page, the theme switch and sign out. `placement` says which way
@@ -67,6 +68,9 @@ export function UserMenu({ placement, showName = false }: { placement: "up" | "d
           <button type="button" role="menuitem" className="menu-item" onClick={() => void signOut()}>
             <LogOut size={16} /> Sign out
           </button>
+          <div className="menu-foot">
+            <Legal />
+          </div>
         </div>
       )}
     </div>

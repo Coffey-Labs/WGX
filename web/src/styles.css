@@ -119,8 +119,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .nav a svg { width: 17px; height: 17px; flex: none; }
 .sidebar-foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line); }
 .sidebar-tools { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 2px; }
-.source { font-size: 11.5px; color: var(--fg-faint); padding: 0 8px; }
-.source:hover { color: var(--accent); }
+.legal { display: flex; flex-wrap: wrap; gap: 0 6px; margin: 0; padding: 0 8px; font-size: 11.5px; color: var(--fg-faint); line-height: 1.5; }
+.legal.center { justify-content: center; margin-top: 14px; padding: 0; }
+.legal a { color: var(--fg-faint); }
+.legal a:hover { color: var(--accent); }
+.legal-sep { color: var(--line-strong); }
+/* The sidebar is too narrow for one line; stack the two halves there. */
+.sidebar-foot .legal, .menu-foot .legal { flex-direction: column; gap: 0; }
+.sidebar-foot .legal-sep, .menu-foot .legal-sep { display: none; }
+.menu-foot { display: none; margin-top: 4px; padding-top: 6px; border-top: 1px solid var(--line); }
+.menu-foot .legal { padding: 4px 10px 2px; }
 .main { padding: 24px 28px 48px; min-width: 0; }
 .page-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
 .page-head p { color: var(--fg-muted); margin: 2px 0 0; }
@@ -204,6 +212,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .topbar .brand { padding: 4px 6px; gap: 8px; }
   .topbar-right { display: flex; align-items: center; gap: 4px; }
   .topbar-right .live-pill { margin-right: 4px; }
+  .menu-foot { display: block; }
   .main { padding: 16px 16px calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 24px); }
   .tabbar {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
