@@ -6,6 +6,8 @@
 
 A self-hosted WireGuard server with a secure web console, in one container.
 
+**[ihasvpn.org](https://ihasvpn.org)** shows what it does and what it looks like.
+
 Start it, open the console, create a peer, scan the QR code. ihasvpn runs the
 tunnel on the kernel's WireGuard module, keeps the NAT rules and forwarding
 sysctls in order, and gives you a dashboard that shows who is connected, how
