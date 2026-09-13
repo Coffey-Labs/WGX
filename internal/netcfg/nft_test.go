@@ -17,7 +17,7 @@ func TestRuleset(t *testing.T) {
 	}
 	out := Ruleset(r)
 	for _, want := range []string{
-		"table inet wgx {",
+		"table inet ihasvpn {",
 		"udp dport 51820 accept",
 		`iifname "wg0" oifname "wg0" drop`,
 		`tcp option maxseg size set rt mtu`,

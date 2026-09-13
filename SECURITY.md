@@ -12,7 +12,7 @@ patched.
 you think the impact is. You will get an acknowledgement within a few days
 and a fix or a plan before anything is made public.
 
-## What WGX does to protect itself
+## What ihasvpn does to protect itself
 
 - The admin UI requires a password (argon2id, 64 MiB, 3 passes) and offers
   time-based one-time codes with recovery codes. Sessions are random 256-bit
@@ -36,8 +36,8 @@ and a fix or a plan before anything is made public.
 ## What you must do
 
 - Do not expose port 51821 to the internet without TLS. Either set
-  `WGX_TLS_SELF_SIGNED=true` (or `WGX_TLS_CERT`/`WGX_TLS_KEY`) or put a
+  `IHASVPN_TLS_SELF_SIGNED=true` (or `IHASVPN_TLS_CERT`/`IHASVPN_TLS_KEY`) or put a
   TLS-terminating reverse proxy in front and list it in
-  `WGX_TRUSTED_PROXIES` so client addresses in the audit log are right.
+  `IHASVPN_TRUSTED_PROXIES` so client addresses in the audit log are right.
 - Turn on two-factor authentication for every administrator.
 - Keep the `/data` volume private: it holds every peer's private key.

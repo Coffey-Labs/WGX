@@ -1,6 +1,6 @@
 # Third-party notices
 
-WGX is licensed under the AGPL-3.0; see LICENSE. This file records work by
+ihasvpn is licensed under the AGPL-3.0; see LICENSE. This file records work by
 other people that ships inside the binary and the image, and the terms it
 comes under. Each project's own licence text travels with it in the Go module
 cache and in web/node_modules and is not repeated here.
@@ -29,7 +29,7 @@ cache and in web/node_modules and is not repeated here.
 The container image is built on Alpine Linux and ships nftables,
 wireguard-tools and wireguard-go from its package repositories, each under
 its own licence (GPL-2.0 for nftables and wireguard-tools, MIT for
-wireguard-go). They are separate programs invoked by WGX, not linked into it.
+wireguard-go). They are separate programs invoked by ihasvpn, not linked into it.
 
-WireGuard is a registered trademark of Jason A. Donenfeld. WGX is not
+WireGuard is a registered trademark of Jason A. Donenfeld. ihasvpn is not
 affiliated with or endorsed by the WireGuard project.

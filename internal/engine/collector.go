@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Coffey-Labs/WGX/internal/store"
+	"github.com/Coffey-Labs/ihasvpn/internal/store"
 )
 
 // Live is what the data plane currently says about one peer, merged with

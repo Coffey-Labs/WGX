@@ -1,4 +1,4 @@
-module github.com/Coffey-Labs/WGX
+module github.com/Coffey-Labs/ihasvpn
 
 go 1.27.1
 

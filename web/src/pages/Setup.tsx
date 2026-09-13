@@ -40,7 +40,7 @@ export function Setup() {
             <div className="brand-mark">
               <Mark size={44} />
             </div>
-            <div className="brand-name">WGX</div>
+            <div className="brand-name">ihasvpn</div>
           </div>
           <h1>Welcome</h1>
           <p className="muted" style={{ textAlign: "center", marginBottom: 16 }}>

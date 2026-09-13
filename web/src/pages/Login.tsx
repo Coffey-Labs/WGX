@@ -44,7 +44,7 @@ export function Login() {
             <div className="brand-mark">
               <Mark size={44} />
             </div>
-            <div className="brand-name">WGX</div>
+            <div className="brand-name">ihasvpn</div>
           </div>
           <h1>{stage === "password" ? "Sign in" : "Second factor"}</h1>
           {error && <div className="error">{error}</div>}

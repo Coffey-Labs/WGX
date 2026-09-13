@@ -1,4 +1,4 @@
-// Thin client for the WGX API. Every call goes through `request`, which
+// Thin client for the ihasvpn API. Every call goes through `request`, which
 // turns non-2xx answers into ApiError so pages can show the server's message.
 
 export class ApiError extends Error {

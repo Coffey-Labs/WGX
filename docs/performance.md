@@ -1,6 +1,6 @@
 # Performance
 
-WGX is built so the packet path is as short as it can be. This page explains
+ihasvpn is built so the packet path is as short as it can be. This page explains
 what it does on its own, what only the host can do, and how to check the
 result.
 
@@ -9,17 +9,17 @@ result.
 In rough order of importance:
 
 1. **Kernel data plane.** WireGuard in the kernel handles encryption in the
-   network stack with no copies to user space. WGX creates a native
+   network stack with no copies to user space. ihasvpn creates a native
    `wireguard` link over netlink and configures it over the same channel;
    nothing sits between the NIC and the module. On a host without the module
-   WGX falls back to `wireguard-go`, which works everywhere but moves every
+   ihasvpn falls back to `wireguard-go`, which works everywhere but moves every
    packet through a user-space process and is several times slower. The
    dashboard says which one is in use. Any Linux kernel from 5.6 has the
    module; on older kernels install `wireguard-dkms` on the host.
 2. **MTU and MSS.** A tunnel packet has 60 bytes of overhead on IPv4 (80 on
    IPv6). The default MTU of 1420 fits a 1500-byte underlay. If the path to
    the server is smaller than that (PPPoE, a second tunnel, some mobile
-   networks) packets fragment or vanish and downloads crawl. WGX clamps the
+   networks) packets fragment or vanish and downloads crawl. ihasvpn clamps the
    TCP MSS of forwarded connections to the route MTU, which removes the
    "connected but pages hang" failure outright; lower the MTU in Settings if
    UDP-heavy traffic still struggles.
@@ -33,15 +33,15 @@ In rough order of importance:
    peer; a single flow is bounded by one core. Machines with AVX2 or ARMv8
    crypto extensions do markedly better.
 
-## What WGX sets by itself
+## What ihasvpn sets by itself
 
-At startup WGX writes these through `/proc/sys` and reports the outcome on
+At startup ihasvpn writes these through `/proc/sys` and reports the outcome on
 the dashboard under **Show kernel tuning**:
 
 | sysctl | value | why |
 | --- | --- | --- |
 | `net.ipv4.ip_forward` | 1 | required; peers go nowhere without it |
-| `net.ipv6.conf.all.forwarding` | 1 | required when `WGX_SUBNET6` is set |
+| `net.ipv6.conf.all.forwarding` | 1 | required when `IHASVPN_SUBNET6` is set |
 | `net.ipv4.conf.all.rp_filter`, `...default.rp_filter` | 2 | strict reverse-path filtering drops legitimate tunnel replies |
 | `net.core.rmem_max`, `net.core.wmem_max` | 26214400 | room for bursts on the UDP socket |
 | `net.core.rmem_default`, `net.core.wmem_default` | 1048576 | default socket buffers |
@@ -51,13 +51,13 @@ the dashboard under **Show kernel tuning**:
 The first three groups are network-namespaced and work inside the container
 when the compose file passes them under `sysctls:` (forwarding) or the
 container has NET_ADMIN (rp_filter). The `net.core.*` and `udp_*` ones are
-**global**: the kernel refuses them from inside a container, WGX logs a
+**global**: the kernel refuses them from inside a container, ihasvpn logs a
 warning, and they show as "not set" on the dashboard. That is expected; set
 them on the host.
 
 ## Host settings
 
-Drop this into `/etc/sysctl.d/99-wgx.conf` on the Docker host and run
+Drop this into `/etc/sysctl.d/99-ihasvpn.conf` on the Docker host and run
 `sysctl --system`:
 
 ```
@@ -76,7 +76,7 @@ net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
 
 # Forwarding, in case you run the host-network compose file and want to own
-# it yourself (WGX sets it otherwise).
+# it yourself (ihasvpn sets it otherwise).
 net.ipv4.ip_forward = 1
 ```
 
@@ -92,10 +92,10 @@ Two more things on the host that are worth checking on a busy server:
 
 ## Host networking
 
-`docker-compose.host.yml` runs WGX with `network_mode: host`. It removes the
-Docker port mapping from the path and lets WGX set the host's own
+`docker-compose.host.yml` runs ihasvpn with `network_mode: host`. It removes the
+Docker port mapping from the path and lets ihasvpn set the host's own
 forwarding sysctls. The costs are listed at the top of that file; in short,
-`wg0` and the `wgx` nftables table become visible on the host, and the admin
+`wg0` and the `ihasvpn` nftables table become visible on the host, and the admin
 UI is bound to localhost so it is not exposed by accident.
 
 ## Measuring

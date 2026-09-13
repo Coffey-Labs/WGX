@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Coffey-Labs/WGX/internal/engine"
-	"github.com/Coffey-Labs/WGX/internal/store"
+	"github.com/Coffey-Labs/ihasvpn/internal/engine"
+	"github.com/Coffey-Labs/ihasvpn/internal/store"
 )
 
 type healthBody struct {
@@ -192,7 +192,7 @@ func safeFilename(name string) string {
 	}
 	out := b.String()
 	if out == "" {
-		out = "wgx"
+		out = "ihasvpn"
 	}
 	if len(out) > 15 {
 		// wg-quick derives the interface name from the file name and caps it
@@ -374,28 +374,28 @@ func (s *Server) handleMetrics(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/plain; version=0.0.4; charset=utf-8")
 	var b strings.Builder
-	fmt.Fprintf(&b, "# HELP wgx_peers Number of configured peers.\n# TYPE wgx_peers gauge\nwgx_peers %d\n", snap.Totals.Peers)
-	fmt.Fprintf(&b, "# HELP wgx_peers_connected Peers with a recent handshake.\n# TYPE wgx_peers_connected gauge\nwgx_peers_connected %d\n", snap.Totals.Connected)
-	fmt.Fprintf(&b, "# HELP wgx_receive_bytes_total Bytes received from peers.\n# TYPE wgx_receive_bytes_total counter\n")
+	fmt.Fprintf(&b, "# HELP ihasvpn_peers Number of configured peers.\n# TYPE ihasvpn_peers gauge\nihasvpn_peers %d\n", snap.Totals.Peers)
+	fmt.Fprintf(&b, "# HELP ihasvpn_peers_connected Peers with a recent handshake.\n# TYPE ihasvpn_peers_connected gauge\nihasvpn_peers_connected %d\n", snap.Totals.Connected)
+	fmt.Fprintf(&b, "# HELP ihasvpn_receive_bytes_total Bytes received from peers.\n# TYPE ihasvpn_receive_bytes_total counter\n")
 	for id, l := range snap.Peers {
-		fmt.Fprintf(&b, "wgx_receive_bytes_total{peer=%q,name=%q} %d\n", id, names[id], l.Rx)
+		fmt.Fprintf(&b, "ihasvpn_receive_bytes_total{peer=%q,name=%q} %d\n", id, names[id], l.Rx)
 	}
-	fmt.Fprintf(&b, "# HELP wgx_transmit_bytes_total Bytes sent to peers.\n# TYPE wgx_transmit_bytes_total counter\n")
+	fmt.Fprintf(&b, "# HELP ihasvpn_transmit_bytes_total Bytes sent to peers.\n# TYPE ihasvpn_transmit_bytes_total counter\n")
 	for id, l := range snap.Peers {
-		fmt.Fprintf(&b, "wgx_transmit_bytes_total{peer=%q,name=%q} %d\n", id, names[id], l.Tx)
+		fmt.Fprintf(&b, "ihasvpn_transmit_bytes_total{peer=%q,name=%q} %d\n", id, names[id], l.Tx)
 	}
-	fmt.Fprintf(&b, "# HELP wgx_peer_connected Whether the peer has a recent handshake.\n# TYPE wgx_peer_connected gauge\n")
+	fmt.Fprintf(&b, "# HELP ihasvpn_peer_connected Whether the peer has a recent handshake.\n# TYPE ihasvpn_peer_connected gauge\n")
 	for id, l := range snap.Peers {
 		v := 0
 		if l.Connected {
 			v = 1
 		}
-		fmt.Fprintf(&b, "wgx_peer_connected{peer=%q,name=%q} %d\n", id, names[id], v)
+		fmt.Fprintf(&b, "ihasvpn_peer_connected{peer=%q,name=%q} %d\n", id, names[id], v)
 	}
-	fmt.Fprintf(&b, "# HELP wgx_peer_last_handshake_seconds Unix time of the last handshake.\n# TYPE wgx_peer_last_handshake_seconds gauge\n")
+	fmt.Fprintf(&b, "# HELP ihasvpn_peer_last_handshake_seconds Unix time of the last handshake.\n# TYPE ihasvpn_peer_last_handshake_seconds gauge\n")
 	for id, l := range snap.Peers {
 		if !l.LastHandshake.IsZero() {
-			fmt.Fprintf(&b, "wgx_peer_last_handshake_seconds{peer=%q,name=%q} %d\n", id, names[id], l.LastHandshake.Unix())
+			fmt.Fprintf(&b, "ihasvpn_peer_last_handshake_seconds{peer=%q,name=%q} %d\n", id, names[id], l.LastHandshake.Unix())
 		}
 	}
 	_, _ = w.Write([]byte(b.String()))

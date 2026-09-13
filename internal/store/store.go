@@ -1,4 +1,4 @@
-// Package store is the SQLite persistence layer. Everything WGX remembers --
+// Package store is the SQLite persistence layer. Everything ihasvpn remembers --
 // peers and their keys, admin users, sessions, traffic history and the audit
 // log -- lives in one file under the data directory.
 package store

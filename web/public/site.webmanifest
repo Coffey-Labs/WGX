@@ -1,11 +1,11 @@
 {
-  "name": "WGX",
-  "short_name": "WGX",
-  "description": "WireGuard server console",
+  "name": "ihasvpn",
+  "short_name": "ihasvpn",
+  "description": "Self-hosted WireGuard server",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#111715",
-  "theme_color": "#121a17",
+  "background_color": "#0d2430",
+  "theme_color": "#0d2430",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }

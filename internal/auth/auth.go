@@ -85,7 +85,7 @@ func VerifyPassword(hash, pw string) bool {
 
 // dummyHash is verified against when the user does not exist, so a login
 // for an unknown name takes as long as one for a known name.
-var dummyHash, _ = HashPassword("wgx-timing-equaliser-password")
+var dummyHash, _ = HashPassword("ihasvpn-timing-equaliser-password")
 
 // EqualiseTiming burns the cost of one hash verification.
 func EqualiseTiming() { VerifyPassword(dummyHash, "not-the-password") }

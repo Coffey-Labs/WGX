@@ -14,11 +14,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Coffey-Labs/WGX/internal/auth"
-	"github.com/Coffey-Labs/WGX/internal/config"
-	"github.com/Coffey-Labs/WGX/internal/engine"
-	"github.com/Coffey-Labs/WGX/internal/store"
-	"github.com/Coffey-Labs/WGX/internal/wg"
+	"github.com/Coffey-Labs/ihasvpn/internal/auth"
+	"github.com/Coffey-Labs/ihasvpn/internal/config"
+	"github.com/Coffey-Labs/ihasvpn/internal/engine"
+	"github.com/Coffey-Labs/ihasvpn/internal/store"
+	"github.com/Coffey-Labs/ihasvpn/internal/wg"
 )
 
 type client struct {
@@ -178,7 +178,7 @@ func TestSetupLoginAndPeers(t *testing.T) {
 	req.Header.Set("Authorization", "Bearer metrics-secret")
 	r, _ := anon.Do(req)
 	b, _ := io.ReadAll(r.Body)
-	if r.StatusCode != 200 || !strings.Contains(string(b), "wgx_peers ") {
+	if r.StatusCode != 200 || !strings.Contains(string(b), "ihasvpn_peers ") {
 		t.Fatalf("token metrics: %d %s", r.StatusCode, b)
 	}
 }

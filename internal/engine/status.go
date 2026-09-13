@@ -3,7 +3,7 @@ package engine
 import (
 	"time"
 
-	"github.com/Coffey-Labs/WGX/internal/netcfg"
+	"github.com/Coffey-Labs/ihasvpn/internal/netcfg"
 )
 
 // SysctlStatus is one sysctl as reported to the UI.

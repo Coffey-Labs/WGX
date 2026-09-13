@@ -1,9 +1,9 @@
-// Command wgx runs the WireGuard server and its admin UI.
+// Command ihasvpn runs the WireGuard server and its admin UI.
 //
-//	wgx                    run the server (the container's default)
-//	wgx reset-password U   set a new password for admin user U and drop
+//	ihasvpn                    run the server (the container's default)
+//	ihasvpn reset-password U   set a new password for admin user U and drop
 //	                       their sessions and second factor; for lockouts
-//	wgx version            print the version
+//	ihasvpn version            print the version
 package main
 
 import (
@@ -19,19 +19,19 @@ import (
 
 	"golang.org/x/term"
 
-	"github.com/Coffey-Labs/WGX/internal/auth"
-	"github.com/Coffey-Labs/WGX/internal/config"
-	"github.com/Coffey-Labs/WGX/internal/engine"
-	"github.com/Coffey-Labs/WGX/internal/server"
-	"github.com/Coffey-Labs/WGX/internal/store"
-	"github.com/Coffey-Labs/WGX/internal/wg"
+	"github.com/Coffey-Labs/ihasvpn/internal/auth"
+	"github.com/Coffey-Labs/ihasvpn/internal/config"
+	"github.com/Coffey-Labs/ihasvpn/internal/engine"
+	"github.com/Coffey-Labs/ihasvpn/internal/server"
+	"github.com/Coffey-Labs/ihasvpn/internal/store"
+	"github.com/Coffey-Labs/ihasvpn/internal/wg"
 )
 
 func main() {
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
 		case "version", "--version", "-v":
-			fmt.Println("wgx", engine.Version)
+			fmt.Println("ihasvpn", engine.Version)
 			return
 		case "reset-password":
 			if err := resetPassword(os.Args[2:]); err != nil {
@@ -49,14 +49,14 @@ func main() {
 		}
 	}
 	if err := run(); err != nil {
-		fmt.Fprintln(os.Stderr, "wgx:", err)
+		fmt.Fprintln(os.Stderr, "ihasvpn:", err)
 		os.Exit(1)
 	}
 }
 
-const usage = `usage: wgx [serve | reset-password <user> | version]
+const usage = `usage: ihasvpn [serve | reset-password <user> | version]
 
-Configuration is read from WGX_* environment variables; see the README.
+Configuration is read from IHASVPN_* environment variables; see the README.
 `
 
 func newLogger(cfg *config.Config) *slog.Logger {
@@ -101,7 +101,7 @@ func run() error {
 		return err
 	}
 	log := newLogger(cfg)
-	log.Info("starting wgx", "version", engine.Version)
+	log.Info("starting ihasvpn", "version", engine.Version)
 
 	st, err := store.Open(cfg.DBPath)
 	if err != nil {
@@ -146,7 +146,7 @@ func run() error {
 // It runs inside the container against the same database.
 func resetPassword(args []string) error {
 	if len(args) != 1 {
-		return errors.New("usage: wgx reset-password <username>")
+		return errors.New("usage: ihasvpn reset-password <username>")
 	}
 	cfg, err := config.FromEnv()
 	if err != nil {
@@ -163,7 +163,7 @@ func resetPassword(args []string) error {
 		return fmt.Errorf("no user named %q", args[0])
 	}
 	var pw string
-	if v := os.Getenv("WGX_NEW_PASSWORD"); v != "" {
+	if v := os.Getenv("IHASVPN_NEW_PASSWORD"); v != "" {
 		pw = v
 	} else {
 		fmt.Fprint(os.Stderr, "New password: ")

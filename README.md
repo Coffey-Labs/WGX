@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="docs/brand/wgx-mark-256.png" width="128" height="128" alt="WGX: a padlock on a shield, with a W for a keyhole">
+  <img src="docs/brand/ihasvpn-mark-256.png" width="128" height="128" alt="ihasvpn: an orange cat peeking over the edge of a teal shield">
 </p>
 
-# WGX
+# ihasvpn
 
-A WireGuard server with a secure web console, in one container.
+A self-hosted WireGuard server with a secure web console, in one container.
 
-Start it, open the console, create a peer, scan the QR code. WGX runs the
+Start it, open the console, create a peer, scan the QR code. ihasvpn runs the
 tunnel on the kernel's WireGuard module, keeps the NAT rules and forwarding
 sysctls in order, and gives you a dashboard that shows who is connected, how
 much they are moving, and a button to cut them off.
@@ -16,7 +16,7 @@ much they are moving, and a button to cut them off.
 - **Peers.** Create, edit, disable, delete. The server generates the key
   pair (and a preshared key) and shows a QR code and a `.conf` download; or
   the client brings its own public key and the private key never leaves the
-  device. Pin a tunnel address or let WGX allocate one. Set an expiry and the
+  device. Pin a tunnel address or let ihasvpn allocate one. Set an expiry and the
   peer is disconnected on time. Rotate keys in one click.
 - **Who is connected.** Live status from the interface counters every two
   seconds: endpoint, last handshake, session length, current rate, total
@@ -68,8 +68,8 @@ apply without a restart.
 ## Quick start
 
 ```sh
-curl -O https://raw.githubusercontent.com/Coffey-Labs/WGX/main/docker-compose.yml
-# edit WGX_ENDPOINT (your public hostname or IP), then:
+curl -O https://raw.githubusercontent.com/Coffey-Labs/ihasvpn/main/docker-compose.yml
+# edit IHASVPN_ENDPOINT (your public hostname or IP), then:
 docker compose up -d
 ```
 
@@ -77,9 +77,9 @@ Open <http://localhost:51821>, create the first administrator, and add a
 peer. Point the WireGuard app on your phone at the QR code.
 
 The console is bound to localhost in the compose file on purpose. To reach
-it from elsewhere, either set `WGX_TLS_SELF_SIGNED: "true"` and bind to the
+it from elsewhere, either set `IHASVPN_TLS_SELF_SIGNED: "true"` and bind to the
 address you need, or put a TLS-terminating reverse proxy in front of it and
-list the proxy in `WGX_TRUSTED_PROXIES`.
+list the proxy in `IHASVPN_TRUSTED_PROXIES`.
 
 For the fastest configuration, `docker-compose.host.yml` runs on the host
 network; [docs/performance.md](docs/performance.md) says when that is worth
@@ -104,33 +104,33 @@ routes, MTU, keepalive, peer isolation, MSS clamping, preshared keys).
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `WGX_ENDPOINT` | | Public hostname or IP for client configs. Also asked for at first-run setup. |
-| `WGX_PORT` | `51820` | UDP listen port. |
-| `WGX_SUBNET` | `10.8.0.0/24` | IPv4 tunnel network; the server takes the first address. |
-| `WGX_SUBNET6` | | IPv6 tunnel network, e.g. `fd42:42:42::/64`. Off when empty. |
-| `WGX_DNS` | `1.1.1.1, 1.0.0.1` | Resolvers handed to clients on first run. |
-| `WGX_INTERFACE` | `wg0` | Interface name. |
-| `WGX_EGRESS_INTERFACE` | auto | Interface to masquerade on. Auto uses the default route. |
-| `WGX_HTTP_LISTEN` | `:51821` | Console listen address. |
-| `WGX_TLS_SELF_SIGNED` | `false` | Serve HTTPS with a certificate generated into `/data`. |
-| `WGX_TLS_CERT`, `WGX_TLS_KEY` | | Serve HTTPS with your own certificate. |
-| `WGX_SECURE_COOKIES` | `false` | Mark cookies `Secure` when TLS terminates at a proxy. |
-| `WGX_TRUSTED_PROXIES` | | CIDRs whose `X-Forwarded-For` is believed. |
-| `WGX_METRICS_TOKEN` | | Bearer token for `/metrics`. A signed-in session works too. |
-| `WGX_SESSION_IDLE` | `12h` | Sign out after this much inactivity. |
-| `WGX_SESSION_MAX` | `168h` | Sign out after this long regardless. |
-| `WGX_TRAFFIC_RETENTION` | `2160h` | How long usage history is kept (90 days). |
-| `WGX_POLL_INTERVAL` | `2s` | How often the interface counters are read. |
-| `WGX_BACKEND` | `auto` | `kernel`, `userspace` or `mock`. Auto prefers the kernel. |
-| `WGX_MANAGE_FIREWALL` | `true` | Set to `false` if the host owns the NAT rules. |
-| `WGX_MANAGE_SYSCTL` | `true` | Set to `false` if the host has tuned itself. |
-| `WGX_DATA_DIR` | `/data` | Where the database and TLS files live. |
-| `WGX_LOG_LEVEL`, `WGX_LOG_JSON` | `info`, `false` | Logging. |
+| `IHASVPN_ENDPOINT` | | Public hostname or IP for client configs. Also asked for at first-run setup. |
+| `IHASVPN_PORT` | `51820` | UDP listen port. |
+| `IHASVPN_SUBNET` | `10.8.0.0/24` | IPv4 tunnel network; the server takes the first address. |
+| `IHASVPN_SUBNET6` | | IPv6 tunnel network, e.g. `fd42:42:42::/64`. Off when empty. |
+| `IHASVPN_DNS` | `1.1.1.1, 1.0.0.1` | Resolvers handed to clients on first run. |
+| `IHASVPN_INTERFACE` | `wg0` | Interface name. |
+| `IHASVPN_EGRESS_INTERFACE` | auto | Interface to masquerade on. Auto uses the default route. |
+| `IHASVPN_HTTP_LISTEN` | `:51821` | Console listen address. |
+| `IHASVPN_TLS_SELF_SIGNED` | `false` | Serve HTTPS with a certificate generated into `/data`. |
+| `IHASVPN_TLS_CERT`, `IHASVPN_TLS_KEY` | | Serve HTTPS with your own certificate. |
+| `IHASVPN_SECURE_COOKIES` | `false` | Mark cookies `Secure` when TLS terminates at a proxy. |
+| `IHASVPN_TRUSTED_PROXIES` | | CIDRs whose `X-Forwarded-For` is believed. |
+| `IHASVPN_METRICS_TOKEN` | | Bearer token for `/metrics`. A signed-in session works too. |
+| `IHASVPN_SESSION_IDLE` | `12h` | Sign out after this much inactivity. |
+| `IHASVPN_SESSION_MAX` | `168h` | Sign out after this long regardless. |
+| `IHASVPN_TRAFFIC_RETENTION` | `2160h` | How long usage history is kept (90 days). |
+| `IHASVPN_POLL_INTERVAL` | `2s` | How often the interface counters are read. |
+| `IHASVPN_BACKEND` | `auto` | `kernel`, `userspace` or `mock`. Auto prefers the kernel. |
+| `IHASVPN_MANAGE_FIREWALL` | `true` | Set to `false` if the host owns the NAT rules. |
+| `IHASVPN_MANAGE_SYSCTL` | `true` | Set to `false` if the host has tuned itself. |
+| `IHASVPN_DATA_DIR` | `/data` | Where the database and TLS files live. |
+| `IHASVPN_LOG_LEVEL`, `IHASVPN_LOG_JSON` | `info`, `false` | Logging. |
 
 ## Locked out?
 
 ```sh
-docker exec -it wgx wgx reset-password admin
+docker exec -it ihasvpn ihasvpn reset-password admin
 ```
 
 sets a new password for that user, clears their second factor and ends
@@ -158,24 +158,12 @@ call it from the same origin or from a non-browser client.
 
 ```sh
 cd web && npm ci && npm run build && cd ..
-go build ./cmd/wgx
+go build ./cmd/ihasvpn
 ```
 
-The UI is embedded in the binary. `docker build -t wgx .` does both steps.
+The UI is embedded in the binary. `docker build -t ihasvpn .` does both steps.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the development loop against the
 mock data plane, which needs no privileges.
-
-## History
-
-This is a complete, ground-up rewrite of an earlier WGX, "WireGuard
-eXtended", which Coffey Labs published in October 2025 and later dropped.
-That one was an installer: a collection of Bash scripts behind a text-mode
-menu that set up and hardened a WireGuard stack on Debian 13 around a
-third-party web UI. The
-[original announcement](https://jcoffey.dev/articles/wg-easy-installer-debian-13/)
-is still up. Nothing from it was carried over; this WGX is its own server and
-its own console, in one container, with the name kept because the intent is
-the same.
 
 ## Licence
 

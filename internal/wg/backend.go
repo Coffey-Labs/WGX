@@ -1,5 +1,5 @@
 // Package wg abstracts the WireGuard data plane behind a small interface so the
-// rest of WGX does not care whether peers live in the kernel module, in a
+// rest of ihasvpn does not care whether peers live in the kernel module, in a
 // userspace wireguard-go process, or in an in-memory mock used by tests and
 // UI development.
 package wg
@@ -25,7 +25,7 @@ type PeerState struct {
 	PersistentKeepalive time.Duration
 }
 
-// PeerConfig is what WGX wants a peer to look like on the interface.
+// PeerConfig is what ihasvpn wants a peer to look like on the interface.
 type PeerConfig struct {
 	PublicKey           Key
 	PresharedKey        *Key
@@ -38,7 +38,7 @@ type DeviceConfig struct {
 	PrivateKey Key
 	ListenPort int
 	// FirewallMark is applied to every packet the interface sends; zero means
-	// none. Left at zero by WGX, but exposed for completeness.
+	// none. Left at zero by ihasvpn, but exposed for completeness.
 	FirewallMark int
 }
 
@@ -50,7 +50,7 @@ type DeviceState struct {
 	Peers      []PeerState
 }
 
-// Backend is the data plane WGX drives.
+// Backend is the data plane ihasvpn drives.
 type Backend interface {
 	// Kind names the implementation: "kernel", "userspace" or "mock".
 	Kind() string
