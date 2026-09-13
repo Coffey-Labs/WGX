@@ -35,6 +35,32 @@ much they are moving, and a button to cut them off.
 - **Self-contained.** One static Go binary, one SQLite file under `/data`,
   no other services. Multi-arch image for amd64 and arm64.
 
+## Screenshots
+
+The dashboard: who is connected, live throughput, traffic history and the
+server's details.
+
+![Dashboard](docs/screenshots/dashboard.jpg)
+
+Peers, with live rates and totals. Connected peers sort to the top.
+
+![Peers](docs/screenshots/peers.jpg)
+
+A peer: status, endpoint, handshake, keys and usage, with disconnect, session
+reset and key rotation a click away.
+
+![Peer overview](docs/screenshots/peer-overview.jpg)
+
+The same peer's configuration: scan the QR code with the WireGuard app, copy
+the text, or download the `.conf`.
+
+![Peer configuration and QR code](docs/screenshots/peer-config.jpg)
+
+Settings: endpoint, client defaults, peer isolation and MSS clamping. Changes
+apply without a restart.
+
+![Settings](docs/screenshots/settings.jpg)
+
 ## Quick start
 
 ```sh
