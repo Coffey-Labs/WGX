@@ -3,6 +3,7 @@ import { api } from "../api";
 import { errorMessage, useAuth } from "../state";
 import { Field } from "../components/ui";
 import { Mark } from "../components/Mark";
+import { Legal } from "../components/Legal";
 
 export function Setup() {
   const { refresh } = useAuth();
@@ -61,11 +62,7 @@ export function Setup() {
           <button className="btn primary" type="submit" disabled={busy} style={{ width: "100%", justifyContent: "center" }}>
             {busy ? "…" : "Create administrator"}
           </button>
-          <p className="small faint" style={{ textAlign: "center", margin: "14px 0 0" }}>
-            <a href="https://github.com/Coffey-Labs/WGX" target="_blank" rel="noreferrer">
-              AGPL-3.0 source
-            </a>
-          </p>
+          <Legal center />
         </div>
       </form>
     </div>

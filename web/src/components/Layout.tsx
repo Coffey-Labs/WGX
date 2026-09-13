@@ -1,64 +1,114 @@
 import type { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { Activity, ClipboardList, LayoutDashboard, LogOut, Settings, Shield, Users, Wifi, WifiOff } from "lucide-react";
-import { useAuth, useLive } from "../state";
+import { Activity, ClipboardList, LayoutDashboard, Settings, Users } from "lucide-react";
+import { useLive } from "../state";
 import { Mark } from "./Mark";
-import { ThemeSwitch } from "./ThemeSwitch";
+import { ThemeToggle } from "./ThemeSwitch";
+import { UserMenu } from "./UserMenu";
+import { Legal } from "./Legal";
 
-const items = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/peers", label: "Peers", icon: Activity },
-  { href: "/settings", label: "Settings", icon: Settings },
-  { href: "/users", label: "Users", icon: Users },
-  { href: "/audit", label: "Audit log", icon: ClipboardList },
-  { href: "/account", label: "Account", icon: Shield },
+// Account is reached through the user menu, so it is not a nav item.
+const groups = [
+  {
+    label: "Overview",
+    items: [
+      { href: "/", label: "Dashboard", icon: LayoutDashboard },
+      { href: "/peers", label: "Peers", icon: Activity },
+    ],
+  },
+  {
+    label: "Administration",
+    items: [
+      { href: "/settings", label: "Settings", icon: Settings },
+      { href: "/users", label: "Users", icon: Users },
+      { href: "/audit", label: "Audit log", icon: ClipboardList },
+    ],
+  },
 ];
+const all = groups.flatMap((g) => g.items);
+
+function isActive(href: string, location: string) {
+  return href === "/" ? location === "/" : location.startsWith(href);
+}
+
+function LivePill() {
+  const { connected } = useLive();
+  return (
+    <span className={`live-pill${connected ? " on" : ""}`} title={connected ? "Live updates connected" : "Live updates reconnecting"}>
+      <i /> {connected ? "Live" : "Reconnecting"}
+    </span>
+  );
+}
 
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
-  const { me, signOut } = useAuth();
-  const { connected } = useLive();
   return (
     <div className="shell">
-      <aside className="sidebar">
-        <div className="brand">
-          <div className="brand-mark">
-            <Mark size={34} />
-          </div>
-          <div>
-            <div className="brand-name">WGX</div>
-            <div className="brand-sub">WireGuard server</div>
-          </div>
+      {/* Phones and narrow windows: brand and account controls up top. */}
+      <header className="topbar">
+        <Link href="/" className="brand" aria-label="WGX dashboard">
+          <Mark size={30} />
+          <span className="brand-name">WGX</span>
+        </Link>
+        <div className="topbar-right">
+          <LivePill />
+          <ThemeToggle />
+          <UserMenu placement="down" />
         </div>
-        <nav className="nav">
-          {items.map((it) => {
-            const active = it.href === "/" ? location === "/" : location.startsWith(it.href);
-            const Icon = it.icon;
-            return (
-              <Link key={it.href} href={it.href} className={active ? "active" : ""}>
-                <Icon />
-                <span>{it.label}</span>
-              </Link>
-            );
-          })}
+      </header>
+
+      {/* Desktop: everything lives in the sidebar. */}
+      <aside className="sidebar">
+        <Link href="/" className="brand" aria-label="WGX dashboard">
+          <Mark size={34} />
+          <span>
+            <span className="brand-name">WGX</span>
+            <span className="brand-sub">WireGuard eXtended</span>
+          </span>
+        </Link>
+        <nav className="nav" aria-label="Main">
+          {groups.map((g) => (
+            <div className="nav-group" key={g.label}>
+              <div className="nav-label">{g.label}</div>
+              {g.items.map((it) => {
+                const Icon = it.icon;
+                return (
+                  <Link key={it.href} href={it.href} className={isActive(it.href, location) ? "active" : ""} aria-current={isActive(it.href, location) ? "page" : undefined}>
+                    <Icon />
+                    <span>{it.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
         </nav>
         <div className="sidebar-foot">
-          <ThemeSwitch compact />
-          <div title={connected ? "Live updates connected" : "Live updates reconnecting"} className="nowrap">
-            {connected ? <Wifi size={13} style={{ verticalAlign: -2, color: "var(--ok)" }} /> : <WifiOff size={13} style={{ verticalAlign: -2, color: "var(--warn)" }} />} {connected ? "live" : "reconnecting"}
+          <div className="sidebar-tools">
+            <LivePill />
+            <ThemeToggle />
           </div>
-          <div className="nowrap">
-            {me?.username} <span className="faint">({me?.role})</span>
-          </div>
-          <button className="btn sm ghost" onClick={() => void signOut()} style={{ alignSelf: "flex-start", marginLeft: -6 }}>
-            <LogOut /> Sign out
-          </button>
-          <a className="nowrap" href="https://github.com/Coffey-Labs/WGX" target="_blank" rel="noreferrer">
-            AGPL-3.0 source
-          </a>
+          <UserMenu placement="up" showName />
+          <Legal />
         </div>
       </aside>
-      <main className="main">{children}</main>
+
+      <main className="main" id="main">
+        {children}
+      </main>
+
+      {/* Phones: primary navigation as a tab bar within thumb reach. */}
+      <nav className="tabbar" aria-label="Main">
+        {all.map((it) => {
+          const Icon = it.icon;
+          const active = isActive(it.href, location);
+          return (
+            <Link key={it.href} href={it.href} className={active ? "active" : ""} aria-current={active ? "page" : undefined}>
+              <Icon />
+              <span>{it.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </div>
   );
 }

@@ -77,7 +77,7 @@ export function Dashboard() {
         <Stat label="Sent" value={bytes(totals?.tx ?? 0)} sub="to peers, all time" />
       </div>
 
-      <div className="grid grid-2 mt" style={{ gridTemplateColumns: "2fr 1fr" }}>
+      <div className="grid grid-main mt">
         <div className="card">
           <div className="card-head">
             <h2>Traffic</h2>
@@ -175,8 +175,8 @@ export function Dashboard() {
                 <tr>
                   <th>Peer</th>
                   <th>Address</th>
-                  <th>Endpoint</th>
-                  <th>Session</th>
+                  <th className="hide-md">Endpoint</th>
+                  <th className="hide-sm">Session</th>
                   <th>Handshake</th>
                   <th className="right">Rate</th>
                   <th className="right">Transfer</th>
@@ -192,8 +192,8 @@ export function Dashboard() {
                       </Link>
                     </td>
                     <td className="mono">{p.ipv4}</td>
-                    <td className="mono">{l.endpoint ?? "—"}</td>
-                    <td>{duration(l.connectedSince, now)}</td>
+                    <td className="mono hide-md">{l.endpoint ?? "—"}</td>
+                    <td className="hide-sm">{duration(l.connectedSince, now)}</td>
                     <td>{ago(l.lastHandshake, now)}</td>
                     <td className="num right">
                       ↓ {rate(l.rxRate)} · ↑ {rate(l.txRate)}

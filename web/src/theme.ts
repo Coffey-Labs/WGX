@@ -6,6 +6,7 @@ export type ThemeChoice = "dark" | "light" | "system";
 
 const KEY = "wgx.theme";
 const media = window.matchMedia("(prefers-color-scheme: light)");
+const listeners = new Set<(c: ThemeChoice) => void>();
 
 export function getThemeChoice(): ThemeChoice {
   try {
@@ -17,13 +18,17 @@ export function getThemeChoice(): ThemeChoice {
   return "dark";
 }
 
-function resolve(choice: ThemeChoice): "dark" | "light" {
+export function resolveTheme(choice: ThemeChoice): "dark" | "light" {
   if (choice === "system") return media.matches ? "light" : "dark";
   return choice;
 }
 
 export function applyTheme(choice: ThemeChoice) {
-  document.documentElement.dataset.theme = resolve(choice);
+  const resolved = resolveTheme(choice);
+  document.documentElement.dataset.theme = resolved;
+  // Keeps the browser chrome (address bar on phones) in step with the page.
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", resolved === "light" ? "#f4f6f5" : "#121a17");
 }
 
 export function setThemeChoice(choice: ThemeChoice) {
@@ -33,6 +38,15 @@ export function setThemeChoice(choice: ThemeChoice) {
     /* storage unavailable */
   }
   applyTheme(choice);
+  listeners.forEach((l) => l(choice));
+}
+
+// Every switch on the page shares one choice; this keeps them in step.
+export function subscribeTheme(l: (c: ThemeChoice) => void): () => void {
+  listeners.add(l);
+  return () => {
+    listeners.delete(l);
+  };
 }
 
 // Called once at startup: paints the right theme before React renders and

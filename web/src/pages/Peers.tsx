@@ -96,7 +96,7 @@ export function Peers() {
           </p>
         </div>
         <div className="toolbar">
-          <div style={{ position: "relative" }}>
+          <div className="search-wrap" style={{ position: "relative" }}>
             <Search size={14} style={{ position: "absolute", left: 9, top: 10, color: "var(--fg-faint)" }} />
             <input className="input search" style={{ paddingLeft: 28 }} placeholder="Search name, address, key…" value={query} onChange={(e) => setQuery(e.target.value)} />
           </div>
@@ -128,10 +128,10 @@ export function Peers() {
                 <tr>
                   <th>Peer</th>
                   <th>Address</th>
-                  <th>Endpoint</th>
+                  <th className="hide-md">Endpoint</th>
                   <th>Handshake</th>
-                  <th className="right">Rate</th>
-                  <th></th>
+                  <th className="right hide-sm">Rate</th>
+                  <th className="hide-md"></th>
                   <th className="right">Transfer</th>
                 </tr>
               </thead>
@@ -148,10 +148,10 @@ export function Peers() {
                         {!p.serverKeys && <span className="badge" style={{ marginLeft: 8 }} title="The client holds its own private key">client key</span>}
                       </td>
                       <td className="mono nowrap">{p.ipv4}</td>
-                      <td className="mono nowrap">{l.endpoint || <span className="faint">—</span>}</td>
+                      <td className="mono nowrap hide-md">{l.endpoint || <span className="faint">—</span>}</td>
                       <td className="nowrap">{ago(l.lastHandshake, now)}</td>
-                      <td className="num right">{l.connected ? `↓ ${rate(l.rxRate)} ↑ ${rate(l.txRate)}` : <span className="faint">—</span>}</td>
-                      <td>{l.connected && <Sparkline values={history.current.get(p.id) ?? []} />}</td>
+                      <td className="num right hide-sm">{l.connected ? `↓ ${rate(l.rxRate)} ↑ ${rate(l.txRate)}` : <span className="faint">—</span>}</td>
+                      <td className="hide-md">{l.connected && <Sparkline values={history.current.get(p.id) ?? []} />}</td>
                       <td className="num right">
                         {bytes(l.rx)} <span className="faint">/</span> {bytes(l.tx)}
                       </td>
