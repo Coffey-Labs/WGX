@@ -1,0 +1,202 @@
+// Package config reads the environment. Everything here is infrastructure
+// that has to be known before the database opens; anything an administrator
+// might change while the server runs lives in the database instead (see
+// engine.Settings).
+package config
+
+import (
+	"errors"
+	"fmt"
+	"net/netip"
+	"os"
+	"strconv"
+	"strings"
+	"time"
+)
+
+// Config is the process configuration.
+type Config struct {
+	DataDir  string
+	DBPath   string
+	Backend  string // auto | kernel | userspace | mock
+	Iface    string
+	// Listen is the UDP port WireGuard listens on.
+	ListenPort int
+	// Subnet4 / Subnet6 are the tunnel networks. The server takes the first
+	// usable address of each.
+	Subnet4 netip.Prefix
+	Subnet6 netip.Prefix // may be invalid (unset)
+	// Egress is the interface to masquerade on; empty means auto-detect.
+	Egress string
+	// HTTP is the admin listener address.
+	HTTP string
+	// TLSCert/TLSKey enable HTTPS from files; TLSSelfSigned generates and
+	// persists a certificate in the data directory.
+	TLSCert, TLSKey string
+	TLSSelfSigned   bool
+	// SecureCookies forces the Secure flag on when TLS terminates elsewhere.
+	SecureCookies bool
+	// TrustedProxies are CIDRs whose X-Forwarded-For / X-Real-IP is believed.
+	TrustedProxies []netip.Prefix
+	// MetricsToken protects /metrics; empty disables the endpoint.
+	MetricsToken string
+	// SessionIdle / SessionMax bound admin sessions.
+	SessionIdle time.Duration
+	SessionMax  time.Duration
+	// TrafficRetention bounds the usage history.
+	TrafficRetention time.Duration
+	// PollInterval is how often the data plane is read.
+	PollInterval time.Duration
+	// LogLevel is debug, info, warn or error.
+	LogLevel string
+	// LogJSON switches the log format.
+	LogJSON bool
+	// Initial* seed the settings on first run only.
+	InitialEndpoint string
+	InitialDNS      string
+	// ManageFirewall may be turned off when the host owns the NAT rules.
+	ManageFirewall bool
+	// ManageSysctl may be turned off when the host has already tuned itself.
+	ManageSysctl bool
+}
+
+func env(key, def string) string {
+	if v, ok := os.LookupEnv(key); ok {
+		return strings.TrimSpace(v)
+	}
+	return def
+}
+
+func envInt(key string, def int) (int, error) {
+	v := env(key, "")
+	if v == "" {
+		return def, nil
+	}
+	n, err := strconv.Atoi(v)
+	if err != nil {
+		return 0, fmt.Errorf("%s: %q is not a number", key, v)
+	}
+	return n, nil
+}
+
+func envBool(key string, def bool) (bool, error) {
+	v := strings.ToLower(env(key, ""))
+	switch v {
+	case "":
+		return def, nil
+	case "1", "true", "yes", "on":
+		return true, nil
+	case "0", "false", "no", "off":
+		return false, nil
+	}
+	return false, fmt.Errorf("%s: %q is not a boolean", key, v)
+}
+
+func envDuration(key string, def time.Duration) (time.Duration, error) {
+	v := env(key, "")
+	if v == "" {
+		return def, nil
+	}
+	d, err := time.ParseDuration(v)
+	if err != nil {
+		return 0, fmt.Errorf("%s: %q is not a duration (try 12h, 30m)", key, v)
+	}
+	return d, nil
+}
+
+// FromEnv builds the configuration from WGX_* variables.
+func FromEnv() (*Config, error) {
+	var errs []error
+	c := &Config{}
+	c.DataDir = env("WGX_DATA_DIR", "/data")
+	c.DBPath = env("WGX_DB", c.DataDir+"/wgx.db")
+	c.Backend = strings.ToLower(env("WGX_BACKEND", "auto"))
+	switch c.Backend {
+	case "auto", "kernel", "userspace", "mock":
+	default:
+		errs = append(errs, fmt.Errorf("WGX_BACKEND: %q is not auto, kernel, userspace or mock", c.Backend))
+	}
+	c.Iface = env("WGX_INTERFACE", "wg0")
+	if len(c.Iface) == 0 || len(c.Iface) > 15 || strings.ContainsAny(c.Iface, " /\t\n") {
+		errs = append(errs, errors.New("WGX_INTERFACE: must be 1-15 characters with no spaces or slashes"))
+	}
+	var err error
+	if c.ListenPort, err = envInt("WGX_PORT", 51820); err != nil {
+		errs = append(errs, err)
+	} else if c.ListenPort < 1 || c.ListenPort > 65535 {
+		errs = append(errs, errors.New("WGX_PORT: must be 1-65535"))
+	}
+	if c.Subnet4, err = netip.ParsePrefix(env("WGX_SUBNET", "10.8.0.0/24")); err != nil || !c.Subnet4.Addr().Is4() {
+		errs = append(errs, errors.New("WGX_SUBNET: must be an IPv4 CIDR such as 10.8.0.0/24"))
+	} else if c.Subnet4.Bits() > 30 {
+		errs = append(errs, errors.New("WGX_SUBNET: needs room for at least two hosts (/30 or larger)"))
+	}
+	if v := env("WGX_SUBNET6", ""); v != "" {
+		if c.Subnet6, err = netip.ParsePrefix(v); err != nil || !c.Subnet6.Addr().Is6() {
+			errs = append(errs, errors.New("WGX_SUBNET6: must be an IPv6 CIDR such as fd42:42:42::/64"))
+		}
+	}
+	c.Egress = env("WGX_EGRESS_INTERFACE", "")
+	c.HTTP = env("WGX_HTTP_LISTEN", ":51821")
+	c.TLSCert = env("WGX_TLS_CERT", "")
+	c.TLSKey = env("WGX_TLS_KEY", "")
+	if (c.TLSCert == "") != (c.TLSKey == "") {
+		errs = append(errs, errors.New("WGX_TLS_CERT and WGX_TLS_KEY must be set together"))
+	}
+	if c.TLSSelfSigned, err = envBool("WGX_TLS_SELF_SIGNED", false); err != nil {
+		errs = append(errs, err)
+	}
+	if c.SecureCookies, err = envBool("WGX_SECURE_COOKIES", false); err != nil {
+		errs = append(errs, err)
+	}
+	for _, p := range strings.Split(env("WGX_TRUSTED_PROXIES", ""), ",") {
+		p = strings.TrimSpace(p)
+		if p == "" {
+			continue
+		}
+		pfx, err := netip.ParsePrefix(p)
+		if err != nil {
+			if a, err2 := netip.ParseAddr(p); err2 == nil {
+				pfx = netip.PrefixFrom(a, a.BitLen())
+			} else {
+				errs = append(errs, fmt.Errorf("WGX_TRUSTED_PROXIES: %q is not an address or CIDR", p))
+				continue
+			}
+		}
+		c.TrustedProxies = append(c.TrustedProxies, pfx)
+	}
+	c.MetricsToken = env("WGX_METRICS_TOKEN", "")
+	if c.SessionIdle, err = envDuration("WGX_SESSION_IDLE", 12*time.Hour); err != nil {
+		errs = append(errs, err)
+	}
+	if c.SessionMax, err = envDuration("WGX_SESSION_MAX", 7*24*time.Hour); err != nil {
+		errs = append(errs, err)
+	}
+	if c.TrafficRetention, err = envDuration("WGX_TRAFFIC_RETENTION", 90*24*time.Hour); err != nil {
+		errs = append(errs, err)
+	}
+	if c.PollInterval, err = envDuration("WGX_POLL_INTERVAL", 2*time.Second); err != nil {
+		errs = append(errs, err)
+	} else if c.PollInterval < 500*time.Millisecond {
+		errs = append(errs, errors.New("WGX_POLL_INTERVAL: must be at least 500ms"))
+	}
+	c.LogLevel = strings.ToLower(env("WGX_LOG_LEVEL", "info"))
+	if c.LogJSON, err = envBool("WGX_LOG_JSON", false); err != nil {
+		errs = append(errs, err)
+	}
+	c.InitialEndpoint = env("WGX_ENDPOINT", "")
+	c.InitialDNS = env("WGX_DNS", "1.1.1.1, 1.0.0.1")
+	if c.ManageFirewall, err = envBool("WGX_MANAGE_FIREWALL", true); err != nil {
+		errs = append(errs, err)
+	}
+	if c.ManageSysctl, err = envBool("WGX_MANAGE_SYSCTL", true); err != nil {
+		errs = append(errs, err)
+	}
+	if len(errs) > 0 {
+		return nil, errors.Join(errs...)
+	}
+	return c, nil
+}
+
+// TLSEnabled reports whether the admin listener speaks HTTPS itself.
+func (c *Config) TLSEnabled() bool { return c.TLSCert != "" || c.TLSSelfSigned }

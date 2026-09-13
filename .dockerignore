@@ -1,0 +1,10 @@
+.git
+.github
+docs
+web/node_modules
+web/dist
+internal/server/static/dist
+*.md
+!web/**/*.md
+docker-compose*.yml
+.gitignore

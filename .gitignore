@@ -1,0 +1,15 @@
+# Build output
+/wgx
+/dist/
+web/node_modules/
+web/dist/
+internal/server/static/dist/*
+!internal/server/static/dist/.gitkeep
+
+# Local state
+/data/
+*.db
+*.db-wal
+*.db-shm
+*.log
+.env
