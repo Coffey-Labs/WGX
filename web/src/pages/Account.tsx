@@ -3,6 +3,7 @@ import { api, type SessionInfo } from "../api";
 import { ago, dateTime } from "../format";
 import { errorMessage, useAuth, useNow, useToast } from "../state";
 import { Field, Modal, copyText } from "../components/ui";
+import { ThemeSwitch } from "../components/ThemeSwitch";
 
 export function Account() {
   const { me, refresh } = useAuth();
@@ -156,6 +157,17 @@ export function Account() {
               </>
             )}
           </div>
+        </div>
+      </div>
+      <div className="card mt">
+        <div className="card-head">
+          <h2>Appearance</h2>
+        </div>
+        <div className="card-body">
+          <p className="muted small" style={{ marginBottom: 10 }}>
+            Dark is the default. The choice is remembered in this browser only.
+          </p>
+          <ThemeSwitch />
         </div>
       </div>
       <div className="card mt">

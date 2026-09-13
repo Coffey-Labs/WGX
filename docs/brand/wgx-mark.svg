@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="WGX">
+  <defs>
+    <linearGradient id="wgx-shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#26332e"/>
+      <stop offset="1" stop-color="#121a17"/>
+    </linearGradient>
+    <linearGradient id="wgx-lock" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3fae90"/>
+      <stop offset="1" stop-color="#2b8f75"/>
+    </linearGradient>
+  </defs>
+  <!-- shield -->
+  <path d="M64 6 L114 22 V60 C114 90 93 112 64 122 C35 112 14 90 14 60 V22 Z" fill="url(#wgx-shield)"/>
+  <path d="M64 6 L114 22 V60 C114 90 93 112 64 122 C35 112 14 90 14 60 V22 Z" fill="none" stroke="#3fae90" stroke-width="3" stroke-linejoin="round"/>
+  <!-- shackle -->
+  <path d="M46 62 V50 a18 18 0 0 1 36 0 V62" fill="none" stroke="#3fae90" stroke-width="8.5" stroke-linecap="round"/>
+  <!-- lock body -->
+  <rect x="34" y="58" width="60" height="42" rx="10" fill="url(#wgx-lock)"/>
+  <!-- the W as the keyhole -->
+  <path d="M46 70 L53 89 L64 76 L75 89 L82 70" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

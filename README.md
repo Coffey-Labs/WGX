@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/brand/wgx-mark-256.png" width="128" height="128" alt="WGX: a padlock on a shield, with a W for a keyhole">
+</p>
+
 # WGX
 
 A WireGuard server with a secure web console, in one container.
@@ -160,6 +164,18 @@ go build ./cmd/wgx
 The UI is embedded in the binary. `docker build -t wgx .` does both steps.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the development loop against the
 mock data plane, which needs no privileges.
+
+## History
+
+This is a complete, ground-up rewrite of an earlier WGX, "WireGuard
+eXtended", which Coffey Labs published in October 2025 and later dropped.
+That one was an installer: a collection of Bash scripts behind a text-mode
+menu that set up and hardened a WireGuard stack on Debian 13 around a
+third-party web UI. The
+[original announcement](https://jcoffey.dev/articles/wg-easy-installer-debian-13/)
+is still up. Nothing from it was carried over; this WGX is its own server and
+its own console, in one container, with the name kept because the intent is
+the same.
 
 ## Licence
 
