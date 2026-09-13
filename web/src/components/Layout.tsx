@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import { Activity, ClipboardList, LayoutDashboard, LogOut, Settings, Shield, Users, Wifi, WifiOff } from "lucide-react";
 import { useAuth, useLive } from "../state";
+import { Mark } from "./Mark";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 const items = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -20,10 +22,8 @@ export function Layout({ children }: { children: ReactNode }) {
     <div className="shell">
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-mark" aria-hidden="true">
-            <svg width="18" height="18" viewBox="0 0 32 32">
-              <path d="M7 10l4 12 5-9 5 9 4-12" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          <div className="brand-mark">
+            <Mark size={34} />
           </div>
           <div>
             <div className="brand-name">WGX</div>
@@ -43,6 +43,7 @@ export function Layout({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="sidebar-foot">
+          <ThemeSwitch compact />
           <div title={connected ? "Live updates connected" : "Live updates reconnecting"} className="nowrap">
             {connected ? <Wifi size={13} style={{ verticalAlign: -2, color: "var(--ok)" }} /> : <WifiOff size={13} style={{ verticalAlign: -2, color: "var(--warn)" }} />} {connected ? "live" : "reconnecting"}
           </div>

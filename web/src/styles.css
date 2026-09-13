@@ -1,4 +1,35 @@
+/* Dark is the default. theme.ts resolves the user's choice (dark, light or
+   follow the system) onto <html data-theme>, so the stylesheet only needs the
+   one override below. */
 :root {
+  --bg: #111715;
+  --bg-elev: #19211e;
+  --bg-sunken: #0c100f;
+  --fg: #e6ece9;
+  --fg-muted: #9aa8a2;
+  --fg-faint: #6a7772;
+  --line: #26312d;
+  --line-strong: #3a4742;
+  --accent: #3fae90;
+  --accent-fg: #06110d;
+  --accent-soft: #163a31;
+  --ok: #3fc275;
+  --ok-soft: #12321f;
+  --warn: #e0a84a;
+  --warn-soft: #3a2c10;
+  --bad: #ef6b62;
+  --bad-soft: #3d1815;
+  --info: #5f9de0;
+  --rx: #5f9de0;
+  --tx: #3fae90;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --radius: 10px;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
   --bg: #f4f6f5;
   --bg-elev: #ffffff;
   --bg-sunken: #e9edeb;
@@ -20,37 +51,7 @@
   --rx: #2a6fb0;
   --tx: #1f6f5c;
   --shadow: 0 1px 2px rgba(20, 30, 26, 0.06), 0 8px 24px rgba(20, 30, 26, 0.06);
-  --radius: 10px;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #111715;
-    --bg-elev: #19211e;
-    --bg-sunken: #0c100f;
-    --fg: #e6ece9;
-    --fg-muted: #9aa8a2;
-    --fg-faint: #6a7772;
-    --line: #26312d;
-    --line-strong: #3a4742;
-    --accent: #3fae90;
-    --accent-fg: #06110d;
-    --accent-soft: #163a31;
-    --ok: #3fc275;
-    --ok-soft: #12321f;
-    --warn: #e0a84a;
-    --warn-soft: #3a2c10;
-    --bad: #ef6b62;
-    --bad-soft: #3d1815;
-    --info: #5f9de0;
-    --rx: #5f9de0;
-    --tx: #3fae90;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
-    color-scheme: dark;
-  }
 }
 
 * { box-sizing: border-box; }
@@ -89,10 +90,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   height: 100vh;
 }
 .brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 16px; }
-.brand-mark {
-  width: 30px; height: 30px; border-radius: 8px; background: var(--accent);
-  display: grid; place-items: center; color: var(--accent-fg); flex: none;
-}
+.brand-mark { display: grid; place-items: center; flex: none; line-height: 0; }
 .brand-name { font-weight: 700; font-size: 16px; letter-spacing: 0.02em; }
 .brand-sub { font-size: 11px; color: var(--fg-muted); }
 .nav a {

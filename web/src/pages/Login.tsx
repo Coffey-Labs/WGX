@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { api } from "../api";
 import { errorMessage, useAuth } from "../state";
 import { Field } from "../components/ui";
+import { Mark } from "../components/Mark";
 
 export function Login() {
   const { refresh } = useAuth();
@@ -39,10 +40,8 @@ export function Login() {
       <form className="card" onSubmit={submit}>
         <div className="card-body">
           <div className="brand">
-            <div className="brand-mark" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 32 32">
-                <path d="M7 10l4 12 5-9 5 9 4-12" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+            <div className="brand-mark">
+              <Mark size={44} />
             </div>
             <div className="brand-name">WGX</div>
           </div>
